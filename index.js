@@ -33,11 +33,9 @@ export default function Worker() {
       const name = extraConfig.workerName ? { name: extraConfig.workerName } : {}
 
       const inlineWorkerFunctionCode = `
+import { Worker } from 'worker_threads';
 export default function inlineWorker(scriptText) {
-  let blob = new Blob([scriptText], {type: 'text/javascript'});
-  let url = URL.createObjectURL(blob);
-  let worker = new Worker(url, ${JSON.stringify(name)});
-  URL.revokeObjectURL(url);
+  let worker = new Worker(scriptText, {eval: true});
   return worker;
 }
 `;
